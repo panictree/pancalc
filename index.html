@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Calculadora para el pan</title>
+    <style>
+        body {
+            width: 90%;
+            margin: 50px auto 0;
+            font-family: "Trebuchet MS", Arial, sans-serif;
+            font-size: 24px;
+        }
+
+        .time {
+            font-size: 30px;
+        }
+
+        .subhead {
+            font-size: 24px;
+        }
+
+        .final-time {
+            margin-top: 40px;
+        }
+
+        .em {
+            color: #007db5;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <p class="subhead">¿A qué hora quieres que esté el pan preparado?</p>
+
+    <form id="form-time">
+        <input id="time" class="time" type="time" name="time" onchange="showTime()">
+        <p id="final-time" class="final-time"></p>
+    </form>
+
+    <script>
+        
+        function showTime() {
+
+            // Get current date
+            var d = new Date();
+            var currentTime = d.getHours() + ":" + d.getMinutes();
+            var currentTimeSplit = currentTime.split(':');
+            var currentTimeMinutes = (+currentTimeSplit[0]) * 60 + (+currentTimeSplit[1]);
+            
+            // Store cook time
+            var cookTime = "2:40";
+            var cookTimeSplit = cookTime.split(':');
+            var cookTimeMinutes = (+cookTimeSplit[0]) * 60 + (+cookTimeSplit[1]);
+
+            // Get desired time
+            var desiredTime = document.getElementById("time").value;
+            var desiredTimeSplit = desiredTime.split(':');
+            var desiredTimeMinutes = (+desiredTimeSplit[0]) * 60 + (+desiredTimeSplit[1]);
+
+            // Add 1440 minutes (24 hours) to desiredTime if the desired time is tomorrow
+            if ( (desiredTimeMinutes + cookTimeMinutes) < (currentTimeMinutes + cookTimeMinutes) ) {
+                desiredTimeMinutes = desiredTimeMinutes + 1440;
+            }
+
+            // Calculate final time to give to user
+            var finalTimeMinutes = (desiredTimeMinutes + cookTimeMinutes) - (currentTimeMinutes + cookTimeMinutes);
+            var hours = Math.floor(finalTimeMinutes / 60);
+            var minutes = finalTimeMinutes % 60;
+
+            // Delete echoed text if user deletes time
+            if ( time.value === "")  {
+                document.getElementById("final-time").innerHTML = "";
+                return false;
+            }
+
+            if (finalTimeMinutes < 160) {
+                document.getElementById("final-time").innerHTML = "La hora que has puesto es dentro de menos de 2:40 horas.";
+                return false;
+            }
+
+            // Echo out final time
+            document.getElementById("final-time").innerHTML = "El tiempo que tienes que ponerle a la panificadora es <span class='em'>" + hours + " hora(s) y " + minutes + " minuto(s)</span>.";
+
+        }
+
+    </script>
+
+</body>
+</html>
